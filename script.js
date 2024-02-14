@@ -1,4 +1,4 @@
-let highestZ = 1;
+ let highestZ = 1;
 
 class Paper {
   holdingPaper = false;
@@ -67,17 +67,39 @@ class Paper {
     });
 
     // Touch events for mobile devices
-     // Touch events for mobile devices
-    document.addEventListener('touchmove', (e) => {
-      e.preventDefault(); // Prevent default scrolling on touch devices
+    paper.addEventListener('touchstart', (e) => {
+      if (this.holdingPaper) return;
+      this.holdingPaper = true;
+      paper.style.zIndex = highestZ;
+      highestZ += 1;
+
       const touch = e.touches[0];
-      if (!this.rotating) {
-        this.mouseX = touch.clientX;
-        this.mouseY = touch.clientY;
-        this.velX = this.mouseX - this.prevMouseX;
-        this.velY = this.mouseY - this.prevMouseY;
+      this.mouseTouchX = touch.clientX;
+      this.mouseTouchY = touch.clientY;
+      this.prevMouseX = this.mouseX;
+      this.prevMouseY = this.mouseY;
+    });
+
+    paper.addEventListener('touchmove', (e) => {
+      e.preventDefault(); // Prevent default scrolling on touch devices
+
+      const touch = e.touches[0];
+      this.mouseX = touch.clientX;
+      this.mouseY = touch.clientY;
+      this.velX = this.mouseX - this.prevMouseX;
+      this.velY = this.mouseY - this.prevMouseY;
+
+      if (this.holdingPaper) {
+        this.currentPaperX += this.velX;
+        this.currentPaperY += this.velY;
+        this.prevMouseX = this.mouseX;
+        this.prevMouseY = this.mouseY;
+        paper.style.transform = `translateX(${this.currentPaperX}px) translateY(${this.currentPaperY}px) rotateZ(${this.rotation}deg)`;
       }
-      // Rest of the code...
+    });
+
+    paper.addEventListener('touchend', () => {
+      this.holdingPaper = false;
     });
   }
 }
