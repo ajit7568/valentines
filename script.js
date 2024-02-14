@@ -67,15 +67,7 @@ class Paper {
     });
 
     // Touch events for mobile devices
-    document.addEventListener('touchmove', (e) => {
-      e.preventDefault(); // Prevent default scrolling on touch devices
-      const touch = e.touches[0];
-      if (!this.rotating) {
-        this.mouseX = touch.clientX;
-        this.mouseY = touch.clientY;
-        this.velX = this.mouseX - this.prevMouseX;
-        this.velY = this.mouseY - this.prevMouseY;
-      }
+    
       // Rest of the code...
     });
   }
